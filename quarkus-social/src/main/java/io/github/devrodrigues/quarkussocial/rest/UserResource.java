@@ -42,8 +42,8 @@ public class UserResource {
             String errorMessage = error.getMessage();
             */
 
-            ResponseError responseError = ResponseError.createFromValidation(violations);
-            return Response.status(400).entity(responseError).build();
+            return ResponseError.createFromValidation(violations).
+                    withStatusCode(ResponseError.UNPROCESSABLE_ENTITY_STATUS);
         }
 
         User user = new User();
@@ -53,7 +53,7 @@ public class UserResource {
         //user.persist(); //salva a entidade no BD
         repository.persist(user);
 
-        return Response.ok(user).build();
+        return Response.status(Response.Status.CREATED.getStatusCode()).entity(user).build();
     }
 
     @GET
@@ -61,7 +61,7 @@ public class UserResource {
         //PanacheQuery<User> query = User.findAll();
         PanacheQuery<User> query = repository.findAll();
 
-        return Response.ok(query.list()).build();
+        return Response.ok(query.list()).build(); //status 200
     }
 
     @DELETE
@@ -74,7 +74,9 @@ public class UserResource {
         if(user != null){
             //user.delete();
             repository.delete(user);
-            return Response.ok().build();
+
+            //return Response.ok().build();
+            return Response.noContent().build(); //não preciso de conteúdo se deletei o usuário
         }
 
         //retorna 404 caso não encontre a id
@@ -93,7 +95,7 @@ public class UserResource {
             user.setAge(userData.getAge());
             //user.update();
             //repository.update(user); - não é necessário devido ao @Transactional
-            return Response.ok().build();
+            return Response.noContent().build();
         }
 
         //retorna 404 caso não encontre a id
