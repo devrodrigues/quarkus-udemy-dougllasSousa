@@ -1,8 +1,14 @@
 package io.github.devrodrigues.quarkussocial.rest.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 //classe criada para respeitar o contrato definido na api: objeto criado somente com essas duas informações:
 public class CreateUserRequest {
+
+    @NotBlank(message = "Name is Required")
     private String name;
+    @NotNull(message = "Age is Required")
     private Integer age;
 
     public CreateUserRequest(){
