@@ -15,5 +15,7 @@
     <orderEntry type="library" name="Maven: jakarta.enterprise:jakarta.enterprise.cdi-api:4.1.0" level="project" />
     <orderEntry type="library" name="Maven: jakarta.inject:jakarta.inject-api:2.0.1" level="project" />
     <orderEntry type="library" name="Maven: jakarta.validation:jakarta.validation-api:3.1.0" level="project" />
+    <orderEntry type="library" name="Maven: org.projectlombok:lombok:1.18.34" level="project" />
+    <orderEntry type="library" name="Maven: io.quarkus:quarkus-panache-common:3.24.4" level="project" />
   </component>
 </module>
