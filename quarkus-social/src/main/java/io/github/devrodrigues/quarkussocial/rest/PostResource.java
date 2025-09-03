@@ -2,6 +2,7 @@ package io.github.devrodrigues.quarkussocial.rest;
 
 import io.github.devrodrigues.quarkussocial.domain.model.Post;
 import io.github.devrodrigues.quarkussocial.domain.model.User;
+import io.github.devrodrigues.quarkussocial.domain.repository.FollowerRepository;
 import io.github.devrodrigues.quarkussocial.domain.repository.PostRepository;
 import io.github.devrodrigues.quarkussocial.domain.repository.UserRepository;
 import io.github.devrodrigues.quarkussocial.rest.dto.CreatePostRequest;
@@ -26,11 +27,15 @@ public class PostResource {
 
     private final UserRepository userRepository;
     private final PostRepository repository;
+    private final FollowerRepository followerRepository;
 
     @Inject
-    public PostResource(UserRepository userRepository, PostRepository repository){
+    public PostResource(UserRepository userRepository,
+                        PostRepository repository,
+                        FollowerRepository followerRepository){
         this.userRepository = userRepository;
         this.repository = repository;
+        this.followerRepository = followerRepository;
     }
 
     @POST
@@ -53,11 +58,35 @@ public class PostResource {
     }
 
     @GET
-    public Response listPosts(@PathParam("userId") Long userId){
+    public Response listPosts(
+            @PathParam("userId") Long userId,
+            @HeaderParam("followerId") Long followerId){
+
         User user = userRepository.findById(userId);
 
         if(user == null){
             return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        if(followerId == null){
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("followerId não enviado").build();
+        }
+
+        User follower = userRepository.findById(followerId);
+
+        if(follower == null){
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("followerId inexistente").build();
+        }
+
+
+        boolean follows = followerRepository.follows(follower, user);
+
+        if(!follows){
+            return Response.status(Response.Status.FORBIDDEN)
+                    .entity("Você não pode acessar esses posts.")
+                    .build();
         }
 
         //sort.by retorna os posts mais recentes primeiro

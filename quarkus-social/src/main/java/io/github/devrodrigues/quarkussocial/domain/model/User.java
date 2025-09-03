@@ -2,9 +2,11 @@ package io.github.devrodrigues.quarkussocial.domain.model;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.util.Objects;
 
+@Getter
 @Entity
 @Table(name = "users")
 public class User {
@@ -17,24 +19,12 @@ public class User {
     @Column(name = "idade")
     private Integer age;
 
-    public Long getId() {
-        return id;
-    }
-
     public void setId(Long id) {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Integer getAge() {
-        return age;
     }
 
     public void setAge(Integer age) {
